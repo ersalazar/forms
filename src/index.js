@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import UsersScreen from './screens/UsersScreen.tsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserScreen from './screens/UserScreen.tsx';
+import NewUser from './screens/NewUser.tsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,6 +15,7 @@ root.render(
       <Routes>
         <Route path='/' element={<UsersScreen/>}/>
         <Route path='/user/:id' element={<UserScreen/>}/>
+        <Route path='/user' element={<NewUser/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

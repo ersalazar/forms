@@ -4,48 +4,32 @@ import { useParams } from "react-router-dom";
 import { User, users } from "../resources/Users.ts";
 import { Alert, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import useForm from '../hooks/useForm.ts';
-import { addUser, updateUser, deleteUser, getUser } from "../resources/UsersFirebase.ts";
+import { addUser, updateUser, deleteUser } from "../resources/UsersFirebase.ts";
 
 const emptyUser : User = {
-    name: '',
-    role: '',
-    salary: 0,
-    address: '',
-  };
+  id: 0,
+  name: '',
+  role: '',
+  salary: 0,
+  address: '',
+};
 
-function UserScreen() {
+function NewUser() {
 
-    const loadUser = async(id) => {
-        const userData = await getUser(id)
-        return userData
+ 
 
-    }
-
-    const { id } = useParams();
-
-
-    const [formUser, handleChange] = useForm(emptyUser);
+    const [formUser, handleChange] = useForm( emptyUser);
 
     const [ error, setError ] = useState('');
     const [ success, setSuccess ] = useState('');
 
     const { name, role, salary, address } = formUser; 
 
-  
-    const update = async() => {
-    const result = await updateUser(id, formUser);
-    result ? setSuccess("User updated") : setError("User not updated");
-
-    }
-    const deleteData = async() => {
-        if(window.confirm('Estas seguro que quieres borrar este usuario')){
-        
-            const result = await deleteUser(id);
-            result ? setSuccess("User Deleted") : setError("User not deleted");
-        }
-
-    }
-
+    const save = async () => {
+        const result = await addUser(formUser);
+        result ? setSuccess("User added") : setError("User not added");
+      }
+      
     return (
       <Container>
         <Grid container spacing={2} marginTop={3}>
@@ -55,7 +39,7 @@ function UserScreen() {
             { success && <Alert severity="success">{success}</Alert>}
             { error && <Alert severity="error">{error}</Alert>}
               <Typography variant="h4">
-                Add/Edit user
+                Add user
               </Typography>
             </Grid>
           </Grid>
@@ -66,16 +50,15 @@ function UserScreen() {
               <br/><br/>
               <TextField type="text" name="role" value={role} onChange={handleChange} fullWidth={true} label="Role" variant="outlined" />
               <br/><br/>
-              <TextField type="numer" name="salary" value={salary} onChange={handleChange} fullWidth={true} label="Salary" variant="outlined" />
+              <TextField type="text" name="salary" value={salary} onChange={handleChange} fullWidth={true} label="Salary" variant="outlined" />
               <br/><br/>
               <TextField type="text" name="address" value={address} onChange={handleChange} fullWidth={true} label="Address" variant="outlined" />
               <br/><br/>
-              <Button variant="outlined" onClick={update} >save</Button>
-              <Button variant="outlined" onClick={deleteData} >Delete</Button>
+              <Button variant="outlined" onClick={save} >save</Button>
               </Grid>
             </Grid>
         </Grid>
       </Container>
     );
   }
-  export default UserScreen;
+  export default NewUser;
